@@ -1,0 +1,33 @@
+---
+- name: Install MySQL server
+  package:
+    name: mysql-server
+    state: present
+
+- name: Start and enable MySQL service
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: Create MySQL database
+  command: mysql -e "CREATE DATABASE {{ db_name }};"
+  register: creation
+  changed_when: creation.rc == 0
+
+- name: Create MySQL user and grant privileges
+  shell: >
+    mysql -e "CREATE USER '{{ db_user }}'@'{{ wp_ip }}' IDENTIFIED BY '{{ db_pswd }}';
+    GRANT ALL PRIVILEGES ON wordpress.* TO '{{ db_user }}'@'{{ wp_ip }}';
+    FLUSH PRIVILEGES;"
+  register: privileges
+  changed_when: privileges.rc != 0
+
+- name: Open MySQL port in firewall
+  firewalld:
+    port: 3306/tcp
+    permanent: yes
+    state: enabled
+
+- name: Reload firewall rules
+  command: firewall-cmd --reload

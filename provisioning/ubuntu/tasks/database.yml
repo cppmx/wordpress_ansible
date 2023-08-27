@@ -1,0 +1,32 @@
+---
+- name: Install MySQL server
+  apt:
+    name: mysql-server
+    state: present
+
+- name: Start and enable MySQL service
+  systemd:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Create MySQL database
+  command: mysql -e "CREATE DATABASE {{ db_name }};"
+  register: creation
+  changed_when: creation.rc == 0
+
+- name: Create MySQL user and grant privileges
+  shell: >
+    mysql -e "CREATE USER '{{ db_user }}'@'{{ wp_ip }}' IDENTIFIED BY '{{ db_pswd }}';
+    GRANT ALL PRIVILEGES ON wordpress.* TO '{{ db_user }}'@'{{ wp_ip }}';
+    FLUSH PRIVILEGES;"
+  register: privileges
+  changed_when: privileges.rc != 0
+
+- name: Update MySQL bind address
+  replace:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: 'bind-address\s*=\s*127.0.0.1'
+    replace: 'bind-address = {{ db_ip }}'
+  when: ansible_pkg_mgr == 'apt' and ansible_distribution == 'Ubuntu'
+  notify: Restart MySQL Service

@@ -1,0 +1,25 @@
+---
+- name: Install packages for Apache, PHP, and MySQL
+  apt:
+    name:
+      - apache2
+      - php
+      - php-mysql
+      - php-mysqlnd
+      - php-mysqli
+      - php-json
+      - unzip
+      - curl
+    state: present
+
+- name: Start and enable Apache service
+  systemd:
+    name: apache2
+    state: started
+    enabled: yes
+
+- name: Create info.php file
+  copy:
+    content: "<?php\nphpinfo();\n?>"
+    dest: /var/www/html/info.php
+  notify: Restart Apache Service

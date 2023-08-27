@@ -1,0 +1,17 @@
+Listen 8080 http
+
+<VirtualHost *:8080>
+    ServerName localhost
+    DocumentRoot /opt/wordpress
+
+    ErrorLog /var/log/wordpress_error.log
+    CustomLog /var/log/wordpress_access.log combined
+
+    LogLevel debug
+
+    <Directory /opt/wordpress>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

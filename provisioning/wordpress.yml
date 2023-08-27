@@ -1,0 +1,24 @@
+---
+- name: Install and configure WordPress
+  hosts: wordpress
+  become: yes
+  vars:
+    load_database_tasks: false
+    load_wordpress_tasks: true
+    load_proxy_tasks: false
+    wordpress_related_tasks:
+      - apache.yml
+      - wordpress.yml
+      - post_install.yml
+  roles:
+    - common
+    - "{{ os_type }}"
+  handlers:
+    - name: Restart Apache Service
+      systemd:
+        name: apache2
+        state: restarted
+    - name: Restart httpd service
+      systemd:
+        name: httpd
+        state: restarted

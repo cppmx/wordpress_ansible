@@ -1,0 +1,61 @@
+<?php
+
+define('DB_NAME', '{{ db_name }}');
+define('DB_USER', '{{ db_user }}');
+define('DB_PASSWORD', '{{ db_pswd }}');
+define('DB_HOST', '{{ db_ip }}');
+define('DB_CHARSET', 'utf8');
+define('DB_COLLATE', 'utf8_general_ci');
+
+
+/**
+ * Authentication unique keys and salts.
+ *
+ * Llaves aleatorias generadas con:
+ * https://api.wordpress.org/secret-key/1.1/salt/
+ *
+ */
+define('AUTH_KEY',         '&P1N0sjb8X[hL6M-k@v@Yob^<yizwyNnr^+rx*%/}7| ~#>$=O5p,B9[v4h/&mr{');
+define('SECURE_AUTH_KEY',  'X0$8lRfJ}0,XUX*iLz;,#<Nd_,U)o;zdzNx$ED5p*~!+3`q4Hi1a@v+Bn-T-!_3r');
+define('LOGGED_IN_KEY',    'jz;2Qgu)vOaA/?})X`Q}|@fP`ip.?]6@R+d)-{HR=7yF4,|F#2_`e;lQ-lY+Kl?Z');
+define('NONCE_KEY',        '[9@q<IZ+B(B|MT)BhMMhosu4yT*C[j4+@AAH?#--v]!(BmSd)=*gHv .sk}SSyy)');
+define('AUTH_SALT',        'yW9GqvnYV-s$q=])Da3@XgYV[chJIA:)UL3:U4Pq+Rs)62I/LX6.Rt?~/v.Z/!}z');
+define('SECURE_AUTH_SALT', '3{lBp`L{o,vLTHSEC|[3:cxsjAMfZ0EAm^s@BCX!wY^W4KIMsu26j},P+-zS7jP!');
+define('LOGGED_IN_SALT',   'GWAsqP-27-MNWf&kNx/]J|.7,y3u+E%__sr;zx@#-d(jDEF-5ZLEq~VhTqB:]H1l');
+define('NONCE_SALT',       ';DCi*&xsMf5og74iCqnQg(+Oo|-Z2>IEssn?--y(r0`,=y4 /A-`}55CPhp[Oi~x');
+
+/**
+ * WordPress database table prefix.
+ *
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
+ */
+$table_prefix = 'wp_';
+
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the documentation.
+ *
+ * @link https://wordpress.org/documentation/article/debugging-in-wordpress/
+ */
+define( 'WP_DEBUG', false );
+
+/* Add any custom values between this line and the "stop editing" line. */
+
+
+
+/* That's all, stop editing! Happy publishing. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';

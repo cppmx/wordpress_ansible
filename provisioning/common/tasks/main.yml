@@ -1,0 +1,31 @@
+---
+- name: Update and upgrade apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Update and upgrade apt packages
+  yum:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 
+  when: ansible_pkg_mgr == 'yum'
+
+- name: Install common packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - epel-release
+    - git
+  when: ansible_pkg_mgr == 'yum'   # Se ejecutará solo en sistemas CentOS/RHEL
+
+- name: Install common packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - git
+  when: ansible_pkg_mgr == 'apt'   # Se ejecutará solo en sistemas Ubuntu

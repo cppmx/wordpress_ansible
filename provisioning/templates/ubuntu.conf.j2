@@ -1,0 +1,64 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+        worker_connections 768;
+        # multi_accept on;
+}
+
+http {
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+    ssl_prefer_server_ciphers on;
+
+    gzip on;
+
+    log_format  custom '$remote_addr - $remote_user [$time_local] '
+                    '"$request" $status $body_bytes_sent '
+                    '"$http_referer" "$http_user_agent" '
+                    '"$http_x_forwarded_for" $request_id ';
+
+    upstream backend {
+        server {{ wp_ip }}:8080;
+    }
+
+    server {
+        server_name actividad1.unir.mx;
+        listen 80;
+
+        error_log   /var/log/proxy_error.log warn;
+        access_log  /var/log/proxy_access.log custom;
+
+        server_tokens off;                                           # Don't display Nginx version
+        add_header X-XSS-Protection "1; mode=block";                 # Prevent cross-site scripting exploits
+        add_header Content-Security-Policy "frame-ancestors 'self'"; # Don't allow be embeded externally
+        add_header X-Frame-Options "SAMEORIGIN";                     # Prevents clickjacking attacks by allowing/disallowing the browser to render iframes.
+
+        gzip on;
+        gzip_disable "msie6";
+        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+        location / {
+            # don't cache it 
+            proxy_no_cache 1;
+            # even if cached, don't try to use it 
+            proxy_cache_bypass 1;
+
+            proxy_set_header   Host              $http_host;
+            proxy_set_header   X-Real-IP         $remote_addr;
+            proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Proto $scheme;
+
+            proxy_pass http://backend/;
+        }
+    }
+}

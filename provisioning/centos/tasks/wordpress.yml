@@ -1,0 +1,38 @@
+---
+- name: Create /opt directory
+  file:
+    path: /opt/
+    state: directory
+    owner: root
+    group: root
+
+- name: Download Wordpress
+  command: curl -o /tmp/wordpress.zip https://wordpress.org/latest.zip
+  args:
+    creates: /tmp/wordpress.zip
+
+- name: Extract WordPress
+  command: "unzip -q /tmp/wordpress.zip -d /opt/"
+  args:
+    creates: /opt/wordpress
+  register: extraction
+  changed_when: extraction.rc == 0
+
+- name: Set Wordpress permissions
+  file:
+    path: /opt/wordpress/
+    recurse: yes
+    mode: "0755"
+
+- name: Create wp-config.php
+  template:
+    src: wp-config.php.j2
+    dest: /opt/wordpress/wp-config.php
+    mode: "0644"
+  when: not (ansible_run_tags | default([]) | bool and '/opt/wordpress/wp-config.php' in ansible_run_tags)
+
+- name: Create wordpress.conf
+  template:
+    src: wordpress.conf.j2
+    dest: /etc/httpd/conf.d/wordpress.conf
+  notify: Restart httpd service

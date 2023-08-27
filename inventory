@@ -1,0 +1,15 @@
+[all:vars]
+db_name="wordpress"
+db_user="wordpress"
+db_pswd="testP@55word"
+wp_ip="192.168.56.10"
+db_ip="192.168.56.20"
+
+[database]
+192.168.56.20
+
+[wordpress]
+192.168.56.10
+
+[proxy]
+192.168.56.2

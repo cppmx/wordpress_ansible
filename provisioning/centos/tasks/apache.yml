@@ -1,0 +1,37 @@
+---
+- name: Install required packages
+  package:
+    name:
+      - httpd
+      - php
+      - php-mysqlnd
+      - php-json
+      - unzip
+      - curl
+    state: present
+
+- name: Create info.php file
+  copy:
+    content: "<?php\nphpinfo();\n?>"
+    dest: /var/www/html/info.php
+
+- name: Enable httpd_can_network_connect on SELinux
+  command: setsebool -P httpd_can_network_connect on
+
+- name: Enable httpd_can_network_connect_db on SELinux
+  command: setsebool -P httpd_can_network_connect_db on
+
+- name: Add port 8080 to firewall rules
+  command: firewall-cmd --zone=public --add-port=8080/tcp --permanent
+
+- name: Add port 80 to firewall rules
+  command: firewall-cmd --zone=public --add-port=80/tcp --permanent
+
+- name: Reload firewall rules
+  command: firewall-cmd --reload
+
+- name: Start and enable httpd service
+  systemd:
+    name: httpd
+    enabled: yes
+    state: started

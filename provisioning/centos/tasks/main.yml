@@ -1,0 +1,11 @@
+---
+- include_tasks: database.yml
+  when: load_database_tasks
+
+- name: Include WordPress related tasks
+  include_tasks: "{{ item }}"
+  loop: "{{ wordpress_related_tasks }}"
+  when: load_wordpress_tasks
+
+- include_tasks: proxy.yml
+  when: load_proxy_tasks

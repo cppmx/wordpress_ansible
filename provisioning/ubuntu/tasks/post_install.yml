@@ -1,0 +1,22 @@
+---
+- name: Download and install WP CLI
+  get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: /tmp/wp
+    mode: '0755'
+
+- name: Move WP CLI to /bin
+  command: mv /tmp/wp /bin/wp
+
+- name: Make WP CLI executable
+  file:
+    path: /bin/wp
+    mode: '0755'
+
+- name: Finish Wordpress installation
+  command: >
+    sudo -u vagrant -i -- wp core install --path=/opt/wordpress/
+    --url=localhost --title="Laboratotio - Wordpress con Ansible - Carlos Colon"
+    --admin_user=admin --admin_password="admin@UN1R" --admin_email=carlos@unir.mx
+  environment:
+    PATH: /bin:/usr/bin:/usr/local/bin

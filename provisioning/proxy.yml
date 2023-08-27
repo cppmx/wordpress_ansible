@@ -1,0 +1,16 @@
+---
+- name: Install and configure nginx
+  hosts: proxy
+  become: yes
+  vars:
+    load_database_tasks: false
+    load_wordpress_tasks: false
+    load_proxy_tasks: true
+  roles:
+    - common
+    - "{{ os_type }}"
+  handlers:
+    - name: Restart nginx service
+      service:
+        name: nginx
+        state: restarted

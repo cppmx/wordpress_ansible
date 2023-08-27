@@ -1,0 +1,26 @@
+---
+- name: Install nginx package
+  package:
+    name: nginx
+    state: present
+
+- name: Start and enable nginx service
+  systemd:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: Create nginx configuration
+  template:
+    src: centos.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: Restart nginx service
+
+- name: Enable httpd_can_network_connect on SELinux
+  command: setsebool -P httpd_can_network_connect on
+
+- name: Add port 80 to firewall rules
+  command: firewall-cmd --zone=public --add-port=80/tcp --permanent
+
+- name: Reload firewall rules
+  command: firewall-cmd --reload

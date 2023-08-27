@@ -1,0 +1,16 @@
+---
+- name: Install and configure database
+  hosts: database
+  become: yes
+  vars:
+    load_database_tasks: true
+    load_wordpress_tasks: false
+    load_proxy_tasks: false
+  roles:
+    - common
+    - "{{ os_type }}"
+  handlers:
+    - name: Restart MySQL Service
+      service:
+        name: mysql
+        state: restarted
