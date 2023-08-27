@@ -4,7 +4,7 @@
 
 Este proyecto es para una tarea de la Maestría en Desarrollo y Operaciones de UNIR.
 
-El Objetivo es desplegar Wondpress usando Vagrant y Chef.
+El Objetivo es desplegar Wondpress usando Vagrant y Ansible.
 
 ## Supuestos
 
