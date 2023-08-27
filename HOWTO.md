@@ -1101,11 +1101,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
 ```
-
-## Conclusiones
-
-En el proyecto descrito se detalla el proceso de creación de un entorno de desarrollo utilizando Ansible y Vagrant para implementar una infraestructura que incluye una base de datos MySQL, un servidor web Apache o Nginx, y una instalación de Wordpress. El enfoque modular y bien organizado del proyecto permite una fácil configuración y personalización de las máquinas virtuales en función de las preferencias del sistema operativo (Ubuntu o CentOS).
-
-El uso de variables de entorno, archivos de inventario y estructuras de directorios bien definidas contribuye a una implementación flexible y reutilizable. La modularización de las tareas en roles y playbooks hace que la administración y el mantenimiento sean más eficientes. Además, la integración de roles específicos para cada sistema operativo garantiza una instalación coherente y adaptada a las diferencias entre plataformas. El proyecto también destaca la importancia de la seguridad y la configuración adecuada, como la apertura de puertos en el firewall y la gestión de permisos en SELinux.
-
-En resumen, este proyecto demuestra cómo utilizar Ansible y Vagrant para automatizar la creación y configuración de una infraestructura de desarrollo completa con varias máquinas virtuales. La organización modular y la consideración de las diferencias entre sistemas operativos hacen que el proyecto sea escalable y adaptable, permitiendo a los desarrolladores crear entornos personalizados de manera eficiente y reproducible.
